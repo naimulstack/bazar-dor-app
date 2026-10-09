@@ -5,6 +5,7 @@ import HeaderPage from "./components/navbar";
 import Marquee from "@/app/components/marquee";
 import Footer from "@/app/components/footer";
 import { Suspense } from "react";
+import { ToastContainer } from "react-toastify";
 
 const hindSiliguri = Hind_Siliguri({
   subsets: ["latin", "bengali"],
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="bn"
       className={`${hindSiliguri.className} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#F3FBF4]">
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Marquee />
         {children}
         <Footer />
+        <ToastContainer position="top-right" autoClose={3000} />
       </body>
     </html>
   );

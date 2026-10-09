@@ -15,7 +15,7 @@ import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { GoArrowLeft } from "react-icons/go";
-import { signIn } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 
 
 const SignUpPage = () => {
@@ -34,6 +34,15 @@ const SignUpPage = () => {
             alert("পাসওয়ার্ড মিলছে না!");
             return;
         }
+
+        const { data: signUpData, error } = await signUp.email({
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            callbackURL: "/",
+        });
+
+        console.log(signUpData, error)
     };
 
     const githubSignIn = async () => {

@@ -3,6 +3,7 @@ import NavLinks from "./navlinks";
 import Logo from "../../../public/Images/logo-icon.png";
 import Link from "next/link";
 import { connection } from "next/server";
+import UserMenu from "./UserMenu";
 
 
 const HeaderPage = async () => {
@@ -40,20 +41,8 @@ const HeaderPage = async () => {
                         </div>
                     </div>
 
-                    <div className="flex shrink-0 items-center gap-2 sm:gap-4">
-                        <Link
-                            href="/sign-in"
-                            className="text-xs font-medium text-gray-700 transition hover:text-green-600 sm:text-sm"
-                        >
-                            সাইন ইন
-                        </Link>
-
-                        <Link
-                            href="/sign-up"
-                            className="rounded-md bg-green-600 px-3 py-2 text-xs font-medium text-white transition hover:bg-green-700 sm:px-4 sm:text-sm"
-                        >
-                            সাইন আপ
-                        </Link>
+                    <div className="flex shrink-0 items-center">
+                        <UserMenu />
                     </div>
 
                 </div>

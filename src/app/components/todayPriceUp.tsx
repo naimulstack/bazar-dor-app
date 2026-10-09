@@ -14,7 +14,7 @@ interface Product {
 
 const TodayPriceUp = async () => {
     const res = await fetch(
-        "https://api.abcz.workers.dev/api/bazardor/products"
+        "https://api.api-store.workers.dev/api/bazardor/products"
     );
 
     const products: Product[] = await res.json();
