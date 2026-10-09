@@ -1,15 +1,19 @@
+
 import Image from "next/image";
 import bannerImage from "../../../public/Images/bazar-hero.png";
 import Link from "next/link";
+import { connection } from "next/server";
 
-const Banner = () => {
+
+const Banner = async () => {
+    await connection();
+
     const date = new Date().toLocaleDateString("bn-BD", {
         dateStyle: "full",
     });
 
     return (
-        <div className="mx-auto my-5 grid max-w-6xl w-full grid-cols-1 items-center gap-4 rounded-2xl border border-gray-200 bg-white px-5 py-6 sm:grid-cols-3 sm:px-8 lg:px-8">
-
+        <div className="mx-auto my-5 grid w-full max-w-6xl grid-cols-1 items-center gap-4 rounded-2xl border border-gray-200 bg-white px-5 py-6 sm:grid-cols-3 sm:px-8 lg:px-8">
             <div className="space-y-4 sm:col-span-2">
                 <div>
                     <span className="inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-800">

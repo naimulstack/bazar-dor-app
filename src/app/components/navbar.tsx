@@ -1,10 +1,13 @@
-
 import Image from "next/image";
 import NavLinks from "./navlinks";
 import Logo from "../../../public/Images/logo-icon.png";
 import Link from "next/link";
+import { connection } from "next/server";
+
 
 const HeaderPage = async () => {
+    await connection();
+
     const date = new Date().toLocaleDateString("bn-BD", {
         dateStyle: "full",
     });
@@ -55,6 +58,7 @@ const HeaderPage = async () => {
 
                 </div>
             </div>
+
             <NavLinks />
         </header>
     );

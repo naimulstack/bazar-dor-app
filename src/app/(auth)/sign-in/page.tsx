@@ -22,7 +22,7 @@ const SignInPage = () => {
             email: data.email,
             password: data.password,
             rememberMe: true,
-            callbackURL: "http://localhost:3000/",
+            callbackURL: "/",
         });
 
     };

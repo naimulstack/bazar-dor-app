@@ -15,7 +15,7 @@ import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { GoArrowLeft } from "react-icons/go";
-import { signUp } from "@/lib/auth-client";
+import { signIn } from "@/lib/auth-client";
 
 
 const SignUpPage = () => {
@@ -34,12 +34,17 @@ const SignUpPage = () => {
             alert("পাসওয়ার্ড মিলছে না!");
             return;
         }
+    };
 
-        const { data: signUpData, error } = await signUp.email({
-            name: data.name, 
-            email: data.email, 
-            password: data.password, 
-            callbackURL: "/", 
+    const githubSignIn = async () => {
+        const data = await signIn.social({
+            provider: "github"
+        })
+    }
+
+    const googleSignIn = async () => {
+        const data = await signIn.social({
+            provider: "google",
         });
     };
 
@@ -178,6 +183,7 @@ const SignUpPage = () => {
                         <div className="grid grid-cols-2 gap-3">
 
                             <Button
+                                onClick={googleSignIn}
                                 type="button"
                                 className="w-full flex items-center justify-center gap-2 border border-gray-200 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200 text-black bg-white"
                             >
@@ -188,6 +194,7 @@ const SignUpPage = () => {
                             </Button>
 
                             <Button
+                                onClick={githubSignIn}
                                 type="button"
                                 className="w-full flex items-center justify-center gap-2 border border-gray-200 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200 text-black bg-white"
                             >
