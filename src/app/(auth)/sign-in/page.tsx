@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { GoArrowLeft } from "react-icons/go";
+import { signIn } from "@/lib/auth-client";
 
 const SignInPage = () => {
 
@@ -15,6 +16,25 @@ const SignInPage = () => {
 
         formData.forEach((value, key) => {
             data[key] = value.toString();
+        });
+
+        const { data: signInData, error } = await signIn.email({
+            email: data.email,
+            password: data.password,
+            rememberMe: true,
+            callbackURL: "http://localhost:3000/",
+        });
+
+    };
+    const githubSignIn = async () => {
+        const data = await signIn.social({
+            provider: "github"
+        })
+    }
+
+    const googleSignIn = async () => {
+        const data = await signIn.social({
+            provider: "google",
         });
     };
 
@@ -93,6 +113,7 @@ const SignInPage = () => {
 
                     <div className="grid grid-cols-2 gap-3">
                         <Button
+                            onClick={googleSignIn}
                             type="button"
                             className="w-full flex items-center justify-center gap-2 border border-gray-200 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200 text-black bg-white"
                         >
@@ -100,6 +121,7 @@ const SignInPage = () => {
                             Google দিয়ে চালিয়ে যান
                         </Button>
                         <Button
+                            onClick={githubSignIn}
                             type="button"
                             className="w-full flex items-center justify-center gap-2 border border-gray-200 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200 text-black bg-white"
                         >

@@ -52,7 +52,7 @@ const AllProducts = async () => {
                 {products.map((item) => (
                     <div
                         key={item.id}
-                        className="bg-slate-50 rounded-xl p-4 border border-slate-200"
+                        className="bg-slate-50 rounded-xl p-4 border border-slate-200 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
                     >
 
                         <div className="flex items-center gap-3 mb-4">

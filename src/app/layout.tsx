@@ -4,6 +4,7 @@ import "./globals.css";
 import HeaderPage from "./components/navbar";
 import Marquee from "@/app/components/marquee";
 import Footer from "@/app/components/footer";
+import { Suspense } from "react";
 
 const hindSiliguri = Hind_Siliguri({
   subsets: ["latin", "bengali"],
@@ -24,11 +25,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-[#F3FBF4]">
 
-        <HeaderPage/>
+        <Suspense fallback={<div>Loading header...</div>}>
+          <HeaderPage />
+        </Suspense>
         <Marquee />
         {children}
-        <Footer/>
-        </body>
+        <Footer />
+      </body>
     </html>
   );
 }
