@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -8,20 +9,45 @@ import { authClient } from "@/lib/auth-client";
 import { AiOutlineDown } from "react-icons/ai";
 import { IoMdPerson } from "react-icons/io";
 import { BsArrowReturnRight } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 const UserMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
     const { data: session, isPending } = authClient.useSession();
+    const previousSession = useRef(false);
+
+    useEffect(() => {
+        if (isPending) return;
+
+        if (session?.user && !previousSession.current) {
+            const oauthSuccess = sessionStorage.getItem("oauth-success");
+
+            if (oauthSuccess === "true") {
+                sessionStorage.removeItem("oauth-success");
+                toast.success("সফলভাবে Sign In হয়েছে!");
+            }
+        }
+
+        previousSession.current = !!session?.user;
+    }, [session, isPending]);
 
     const handleSignOut = async () => {
-        await authClient.signOut();
-        setIsOpen(false);
-        router.push("/sign-in");
+        const { error } = await authClient.signOut();
+
+        if (error) {
+            toast.error("সাইন আউট করা যায়নি!");
+        } else {
+            setIsOpen(false);
+            toast.success("সফলভাবে Sign Out হয়েছে!");
+            router.push("/sign-in");
+        }
     };
 
     if (isPending) {
-        return <div className="h-9 w-24 animate-pulse rounded bg-gray-100" />;
+        return (
+            <div className="h-9 w-24 animate-pulse rounded bg-gray-100" />
+        );
     }
 
     const user = session?.user;
@@ -29,10 +55,17 @@ const UserMenu = () => {
     if (!user) {
         return (
             <div className="flex items-center gap-3">
-                <Link href="/sign-in" className="text-sm text-gray-700 hover:text-green-600">
+                <Link
+                    href="/sign-in"
+                    className="text-sm text-gray-700 hover:text-green-600"
+                >
                     সাইন ইন
                 </Link>
-                <Link href="/sign-up" className="rounded-md bg-green-600 px-4 py-2 text-sm text-white hover:bg-green-700">
+
+                <Link
+                    href="/sign-up"
+                    className="rounded-md bg-green-600 px-4 py-2 text-sm text-white hover:bg-green-700"
+                >
                     সাইন আপ
                 </Link>
             </div>
@@ -42,13 +75,14 @@ const UserMenu = () => {
     return (
         <div className="relative rounded-2xl border border-gray-400">
             <button
+                type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 rounded-2xl p-2 hover:bg-green-100 cursor-pointer"
+                className="flex cursor-pointer items-center gap-2 rounded-2xl p-2 hover:bg-green-100"
             >
                 {user.image ? (
                     <Image
                         src={user.image}
-                        alt={user.name}
+                        alt={user.name || "User"}
                         width={100}
                         height={100}
                         className="h-8 w-8 rounded-full object-cover"
@@ -62,13 +96,14 @@ const UserMenu = () => {
                 <span className="max-w-28 truncate text-sm text-gray-800">
                     {user.name}
                 </span>
-                <span className="text-md"><AiOutlineDown />
-                </span>
+
+                <AiOutlineDown className="text-md" />
             </button>
 
             {isOpen && (
                 <>
                     <button
+                        type="button"
                         aria-label="Close menu"
                         className="fixed inset-0 z-40 cursor-default"
                         onClick={() => setIsOpen(false)}
@@ -78,6 +113,7 @@ const UserMenu = () => {
                         <p className="truncate text-sm font-semibold text-gray-800">
                             {user.name}
                         </p>
+
                         <p className="mt-1 truncate text-xs text-gray-500">
                             {user.email}
                         </p>
@@ -88,18 +124,20 @@ const UserMenu = () => {
                             href="/profile"
                             onClick={() => setIsOpen(false)}
                             className="block rounded-md px-2 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        > <span className="flex gap-2 items-center">
-                                <IoMdPerson  className="text-xl"/>
+                        >
+                            <span className="flex items-center gap-2">
+                                <IoMdPerson className="text-xl" />
                                 আমার প্রোফাইল
                             </span>
                         </Link>
 
                         <button
+                            type="button"
                             onClick={handleSignOut}
                             className="mt-1 w-full rounded-md px-2 py-2 text-left text-sm text-red-600 hover:bg-red-50"
                         >
-                            <span className="flex gap-2 items-center">
-                                <BsArrowReturnRight className="text-xl"/>
+                            <span className="flex items-center gap-2">
+                                <BsArrowReturnRight className="text-xl" />
                                 সাইন আউট
                             </span>
                         </button>

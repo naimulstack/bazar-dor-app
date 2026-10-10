@@ -15,10 +15,14 @@ import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { GoArrowLeft } from "react-icons/go";
-import { signIn, signUp } from "@/lib/auth-client";
+import { signIn, signUp, authClient } from "@/lib/auth-client";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 
 const SignUpPage = () => {
+
+    const router = useRouter();
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -31,7 +35,7 @@ const SignUpPage = () => {
         });
 
         if (data.password !== data.confirmPassword) {
-            alert("পাসওয়ার্ড মিলছে না!");
+            toast.error("পাসওয়ার্ড মিলছে না!");
             return;
         }
 
@@ -42,40 +46,61 @@ const SignUpPage = () => {
             callbackURL: "/",
         });
 
-        console.log(signUpData, error)
+        if (error) {
+            toast.error("সফলভাবে Sign Up হয়নি");
+        } else {
+            toast.success("সফলভাবে Sign Up হয়েছে!");
+            await authClient.getSession();
+            router.replace("/");
+            router.refresh();
+        }
     };
 
+
     const githubSignIn = async () => {
-        const data = await signIn.social({
-            provider: "github"
-        })
-    }
+        sessionStorage.setItem("oauth-success", "true");
+
+        await signIn.social({
+            provider: "github",
+            callbackURL: "/",
+            errorCallbackURL: "/sign-in",
+        });
+    };
 
     const googleSignIn = async () => {
-        const data = await signIn.social({
+        sessionStorage.setItem("oauth-success", "true");
+
+        await signIn.social({
             provider: "google",
+            callbackURL: "/",
+            errorCallbackURL: "/sign-in",
         });
     };
 
     return (
-        <div className="flex justify-center items-center mt-8 bg-[#f4f7f4] my-2">
-            <Form className="w-full max-w-md p-4" onSubmit={onSubmit}>
+        <div className="my-2 flex h-auto items-start justify-center bg-[#f4f7f4] px-3 py-6 sm:px-6 sm:py-8 md:items-center">
+
+            <Form
+                className="w-full max-w-md"
+                onSubmit={onSubmit}
+            >
                 <Fieldset>
 
-                    <div className="mx-auto text-center">
-                        <Fieldset.Legend className="text-2xl font-bold text-gray-800">
+                    <div className="mx-auto mb-5 w-full px-1 text-center sm:mb-6">
+                        <Fieldset.Legend className="text-xl font-bold text-gray-800 sm:text-2xl">
                             অ্যাকাউন্ট তৈরি করুন
                         </Fieldset.Legend>
 
-                        <Description className="text-sm text-gray-500 mt-1">
+                        <Description className="mt-1 text-xs leading-5 text-gray-500 sm:text-sm">
                             বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।
                         </Description>
                     </div>
 
-                    <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <div className="w-full rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6 md:p-8">
 
                         <FieldGroup className="space-y-4">
 
+                            {/* Name */}
                             <TextField
                                 isRequired
                                 name="name"
@@ -93,12 +118,13 @@ const SignUpPage = () => {
 
                                 <Input
                                     placeholder="যেমন: রহিম উদ্দিন"
-                                    className="mt-1"
+                                    className="mt-1 w-full"
                                 />
 
                                 <FieldError />
                             </TextField>
 
+                            {/* Email */}
                             <TextField
                                 isRequired
                                 name="email"
@@ -110,7 +136,7 @@ const SignUpPage = () => {
 
                                 <Input
                                     placeholder="you@example.com"
-                                    className="mt-1"
+                                    className="mt-1 w-full"
                                 />
 
                                 <FieldError />
@@ -143,7 +169,7 @@ const SignUpPage = () => {
 
                                 <Input
                                     placeholder="কমপক্ষে ৮ অক্ষর"
-                                    className="mt-1"
+                                    className="mt-1 w-full"
                                 />
 
                                 <FieldError />
@@ -160,7 +186,7 @@ const SignUpPage = () => {
 
                                 <Input
                                     placeholder="আবার লিখুন"
-                                    className="mt-1"
+                                    className="mt-1 w-full"
                                 />
 
                                 <FieldError />
@@ -172,55 +198,51 @@ const SignUpPage = () => {
 
                             <Button
                                 type="submit"
-                                className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 rounded-xl shadow-md transition-all"
+                                className="w-full rounded-xl bg-green-600 py-3 font-medium text-white shadow-sm transition-colors hover:bg-green-700"
                             >
                                 অ্যাকাউন্ট তৈরি করুন
                             </Button>
 
                         </Fieldset.Actions>
 
-                        <div className="flex items-center my-6">
-                            <div className="flex-grow border-t border-gray-200"></div>
+                        <div className="my-5 flex items-center sm:my-6">
+                            <div className="flex-grow border-t border-gray-200" />
 
-                            <span className="px-3 text-sm text-gray-700">
+                            <span className="px-3 text-sm text-gray-500">
                                 অথবা
                             </span>
 
-                            <div className="flex-grow border-t border-gray-200"></div>
+                            <div className="flex-grow border-t border-gray-200" />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2">
 
                             <Button
                                 onClick={googleSignIn}
                                 type="button"
-                                className="w-full flex items-center justify-center gap-2 border border-gray-200 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200 text-black bg-white"
+                                className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm font-medium text-black transition-colors hover:bg-gray-100"
                             >
-                                <span>
-                                    <FcGoogle />
-                                </span>
-                                Google দিয়ে চালিয়ে যান
+                                <FcGoogle className="shrink-0 text-lg" />
+                                <span>Google দিয়ে চালিয়ে যান</span>
                             </Button>
 
                             <Button
                                 onClick={githubSignIn}
                                 type="button"
-                                className="w-full flex items-center justify-center gap-2 border border-gray-200 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200 text-black bg-white"
+                                className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm font-medium text-black transition-colors hover:bg-gray-100"
                             >
-                                <span>
-                                    <FaGithub />
-                                </span>
-                                GitHub দিয়ে চালিয়ে যান
+                                <FaGithub className="shrink-0 text-lg" />
+                                <span>GitHub দিয়ে চালিয়ে যান</span>
                             </Button>
 
                         </div>
 
-                        <div className="text-center mt-6 text-sm text-gray-600">
-                            অ্যাকাউন্ট আছে?
+                        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-1 text-center text-sm text-gray-600">
+                            <span>অ্যাকাউন্ট আছে?</span>
 
                             <Link
                                 href="/sign-in"
-                                className="text-green-600 font-semibold hover:underline pl-2"
+                                className="font-semibold text-green-600 hover:underline"
                             >
                                 সাইন ইন করুন
                             </Link>
@@ -228,10 +250,10 @@ const SignUpPage = () => {
 
                     </div>
 
-                    <div className="mt-6 text-center">
+                    <div className="mt-5 text-center sm:mt-6">
                         <Link
                             href="/"
-                            className="flex items-center justify-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                            className="inline-flex items-center justify-center gap-1.5 text-sm text-gray-600 transition-colors hover:text-gray-900"
                         >
                             <GoArrowLeft />
                             হোম পেজে ফিরে যান

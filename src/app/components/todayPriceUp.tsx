@@ -3,7 +3,7 @@ import Link from "next/link";
 
 interface Product {
     id: number;
-     slug: string;
+    slug: string;
     nameBn: string;
     today: number;
     unit: string;
@@ -16,7 +16,7 @@ interface Product {
 
 const TodayPriceUp = async () => {
     const res = await fetch(
-        "https://api.abcz.workers.dev/api/bazardor/products"
+        "https://openapi.programming-hero.com/api/bazardor/products"
     );
 
     const products: Product[] = await res.json();

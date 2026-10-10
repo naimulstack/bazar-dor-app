@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import bannerImage from "../../../public/Images/bazar-hero.png";
 import Link from "next/link";

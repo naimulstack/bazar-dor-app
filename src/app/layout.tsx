@@ -25,7 +25,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${hindSiliguri.className} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#F3FBF4]">
-
         <Suspense fallback={<div>Loading header...</div>}>
           <HeaderPage />
         </Suspense>
