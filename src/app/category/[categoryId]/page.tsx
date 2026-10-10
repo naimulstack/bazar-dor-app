@@ -49,6 +49,10 @@ const CategoryProduct = async ({
         (item) => item.slug === categoryId
     );
 
+    const toBanglaNumber = (number: number) => {
+        return new Intl.NumberFormat("bn-BD").format(number);
+    };
+
     return (
         <main className="min-h-screen bg-[#f1f6f2]">
             <div className="mx-auto max-w-6xl px-4 py-6">
@@ -66,7 +70,7 @@ const CategoryProduct = async ({
                             </h1>
 
                             <p className="mt-1 text-sm text-gray-500">
-                                {data.length}টি পণ্য আজকের দাম ও পরিবর্তন
+                                {toBanglaNumber(data.length)}{" "}টি পণ্য আজকের দাম ও পরিবর্তন
                             </p>
                         </div>
 
