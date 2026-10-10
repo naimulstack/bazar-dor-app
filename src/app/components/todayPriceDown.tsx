@@ -1,7 +1,9 @@
 import { TiArrowSortedDown } from "react-icons/ti";
+import Link from "next/link";
 
 interface Product {
     id: number;
+    slug: string;
     nameBn: string;
     today: number;
     unit: string;
@@ -14,12 +16,12 @@ interface Product {
 
 const TodayPriceDown = async () => {
     const res = await fetch(
-        "https://api.api-store.workers.dev/api/bazardor/products"
+        "https://api.abcz.workers.dev/api/bazardor/products"
     );
 
     const products: Product[] = await res.json();
 
-    const increasedProducts = products
+    const decreasedProducts = products
         .filter((item) => item.change.dir === "down")
         .slice(0, 6);
 
@@ -49,10 +51,11 @@ const TodayPriceDown = async () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-                {increasedProducts.map((item) => (
-                    <div
+                {decreasedProducts.map((item) => (
+                    <Link
                         key={item.id}
-                        className="bg-slate-50 rounded-xl p-4 border border-slate-200 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                        href={`/products/${item.slug}`}
+                        className="block bg-slate-50 rounded-xl p-4 border border-slate-200 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
                     >
 
                         <div className="flex items-center gap-3 mb-4">
@@ -74,24 +77,24 @@ const TodayPriceDown = async () => {
                         </div>
 
                         <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-xs text-slate-500">
-                                        আজকের দাম
-                                    </p>
+                            <div>
+                                <p className="text-xs text-slate-500">
+                                    আজকের দাম
+                                </p>
 
-                                    <p className="text-xl font-bold text-slate-900">
-                                        {toBanglaNumber(item.today)} টাকা
-                                    </p>
-                                </div>
+                                <p className="text-xl font-bold text-slate-900">
+                                    {toBanglaNumber(item.today)} টাকা
+                                </p>
+                            </div>
 
-                                <div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600">
-                                    <TiArrowSortedDown />
-                                    {toBanglaNumber(item.change.pct)}%
-                                </div>
+                            <div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-600">
+                                <TiArrowSortedDown />
+                                {toBanglaNumber(item.change.pct)}%
+                            </div>
 
                         </div>
 
-                    </div>
+                    </Link>
                 ))}
 
             </div>

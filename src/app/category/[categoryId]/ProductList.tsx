@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { TiArrowSortedUp, TiArrowSortedDown, } from "react-icons/ti";
 import { LuMinus } from "react-icons/lu";
+import Link from "next/link";
 
 interface Product {
     id: string;
@@ -81,10 +82,12 @@ const ProductList = ({
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
                 {sortedProducts.map((product) => (
-                    <div
+                    <Link
                         key={product.id}
-                        className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                        href={`/products/${product.slug}`}
+                        className="block rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
                     >
                         <div className="flex items-center gap-4">
                             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-green-50 text-3xl">
@@ -132,7 +135,7 @@ const ProductList = ({
                                 {toBanglaNumber(product.change.pct)}%
                             </span>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>

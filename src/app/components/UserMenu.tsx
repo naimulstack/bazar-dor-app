@@ -9,9 +9,6 @@ import { AiOutlineDown } from "react-icons/ai";
 import { IoMdPerson } from "react-icons/io";
 import { BsArrowReturnRight } from "react-icons/bs";
 
-
-
-
 const UserMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();

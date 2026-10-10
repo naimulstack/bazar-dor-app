@@ -31,12 +31,12 @@ const CategoryProduct = async ({
     const { categoryId } = await params;
 
     const productRes = await fetch(
-        `https://api.api-store.workers.dev/api/bazardor/products?category=${categoryId}`
+        `https://api.abcz.workers.dev/api/bazardor/products?category=${categoryId}`
     );
     const data: Product[] = await productRes.json();
 
     const categoryRes = await fetch(
-        "https://api.api-store.workers.dev/api/bazardor/categories"
+        "https://api.abcz.workers.dev/api/bazardor/categories"
     );
 
     if (!categoryRes.ok) {

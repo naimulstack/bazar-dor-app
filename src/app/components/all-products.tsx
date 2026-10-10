@@ -1,8 +1,10 @@
 import { TiArrowSortedUp, TiArrowSortedDown, } from "react-icons/ti";
 import { LuMinus } from "react-icons/lu";
+import Link from "next/link";
 
 interface Product {
     id: number;
+    slug: string;
     nameBn: string;
     today: number;
     yesterday: number;
@@ -16,7 +18,7 @@ interface Product {
 
 const AllProducts = async () => {
     const res = await fetch(
-        "https://api.api-store.workers.dev/api/bazardor/products"
+        "https://api.abcz.workers.dev/api/bazardor/products"
     );
 
     const products: Product[] = await res.json();
@@ -50,9 +52,10 @@ const AllProducts = async () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
                 {products.map((item) => (
-                    <div
+                    <Link
                         key={item.id}
-                        className="bg-slate-50 rounded-xl p-4 border border-slate-200 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                        href={`/products/${item.slug}`}
+                        className="block bg-slate-50 rounded-xl p-4 border border-slate-200 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
                     >
 
                         <div className="flex items-center gap-3 mb-4">
@@ -106,7 +109,7 @@ const AllProducts = async () => {
 
                         </div>
 
-                    </div>
+                    </Link>
                 ))}
 
             </div>
